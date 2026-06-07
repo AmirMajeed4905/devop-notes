@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Notes App</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/static/style.css">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23111827'/%3E%3Ctext x='50' y='55' font-size='50' text-anchor='middle' fill='%23ffffff' font-family='Inter,Arial'%3E%F0%9F%93%92%3C/text%3E%3C/svg%3E">
+</head>
+
+<body class="bg-gray-100">
+
+<!-- HEADER -->
+<header class="bg-gradient-to-r from-slate-900 to-slate-700 text-white py-4 shadow">
+  <div class="max-w-6xl mx-auto px-6 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <div class="bg-white text-slate-900 rounded-full p-2">📒</div>
+      <h1 class="font-bold text-xl">Notes Studio</h1>
+    </div>
+    <nav class="text-sm text-gray-200 hidden sm:flex gap-6">
+      <a href="#" class="hover:underline">Home</a>
+      <a href="#" class="hover:underline">Docs</a>
+      <a href="#" class="hover:underline">About</a>
+    </nav>
+  </div>
+</header>
+
+<!-- MAIN -->
+<main class="max-w-5xl mx-auto p-6">
+
+  <!-- HERO + CREATE -->
+  <div class="bg-white p-6 rounded-xl shadow mb-6 grid gap-6 md:grid-cols-3">
+    <div class="md:col-span-2">
+      <h2 class="font-semibold text-2xl">Your personal notes, organized.</h2>
+      <p class="text-gray-500 mt-1">Quickly add, edit, and delete notes. Everything runs in Docker.</p>
+
+      <div class="mt-4 flex gap-3">
+        <input id="search" placeholder="Search notes..." class="flex-1 p-3 border rounded-lg" oninput="filterNotes()">
+        <button id="refreshBtn" class="px-4 py-2 border rounded">Refresh</button>
+      </div>
+    </div>
+
+    <div class="bg-slate-50 p-4 rounded-lg">
+      <h3 class="font-medium mb-2">Create Note</h3>
+      <div class="grid gap-2">
+        <input id="title" placeholder="Title" class="p-3 border rounded-lg">
+        <textarea id="content" placeholder="Content" class="p-3 border rounded-lg"></textarea>
+        <button id="createBtn" class="bg-slate-900 text-white py-2 rounded-lg hover:bg-slate-800">Add Note</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- NOTES -->
+  <div class="bg-white p-5 rounded-xl shadow">
+    <h2 class="font-semibold mb-4">Your Notes</h2>
+    <div id="notes" class="grid gap-4 md:grid-cols-2 lg:grid-cols-3"></div>
+  </div>
+
+</main>
+
+<!-- EDIT MODAL -->
+<div id="modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
+  <div class="bg-white p-6 rounded-xl w-full max-w-md">
+    <h2 class="font-bold mb-3">Edit Note</h2>
+
+    <input id="editTitle" class="w-full p-2 border mb-2 rounded" placeholder="Title">
+    <textarea id="editContent" class="w-full p-2 border mb-3 rounded" placeholder="Content"></textarea>
+
+    <div class="flex justify-between">
+      <div class="text-sm text-gray-500">Editing note ID: <span id="editIdLabel">-</span></div>
+      <div class="flex gap-2">
+        <button id="cancelEditBtn" class="px-3 py-1 border rounded">Cancel</button>
+        <button id="saveEditBtn" class="px-3 py-1 bg-slate-900 text-white rounded">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="/static/app.js"></script>
+
+</body>
+</html>

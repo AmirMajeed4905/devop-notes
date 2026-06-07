@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Notes Studio</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%231a2938'/%3E%3Ctext x='50' y='55' font-size='50' text-anchor='middle' fill='%23ffffff' font-family='Inter,Arial'%3E%F0%9F%93%92%3C/text%3E%3C/svg%3E">
+</head>
+<body>
+  <div class="page-shell">
+    <header class="topbar">
+      <div class="topbar__brand">
+        <div class="brand-mark">NS</div>
+        <div>
+          <div class="brand-name">Notes Studio</div>
+          <div class="brand-subtitle">Professional notes for teams and individuals</div>
+        </div>
+      </div>
+      <nav class="topbar__nav">
+        <a href="/">Home</a>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/about">About</a>
+      </nav>
+    </header>
+
+    <main class="content content-landing">
+      <section class="hero card">
+        <div class="hero__copy">
+          <span class="eyebrow">Organize better</span>
+          <h1>Modern note management built for growth.</h1>
+          <p>Start with a polished dashboard, secure authentication, and seamless note editing — all powered by FastAPI and PostgreSQL.</p>
+          <div class="hero__stats">
+            <article>
+              <strong>Write faster</strong>
+              <p>Clean, simple note creation</p>
+            </article>
+            <article>
+              <strong>Stay secure</strong>
+              <p>JWT auth and protected data</p>
+            </article>
+            <article>
+              <strong>Deploy quickly</strong>
+              <p>Docker-ready stack</p>
+            </article>
+          </div>
+          <div class="hero__actions">
+            <a class="button button-primary" href="/dashboard">Go to dashboard</a>
+            <a class="button button-secondary" href="/about">Learn more</a>
+          </div>
+        </div>
+
+        <aside class="hero__panel">
+          <div class="panel-head">
+            <p class="eyebrow">Sign in</p>
+            <h2>Secure access to your workspace</h2>
+          </div>
+          <label class="field">
+            <span>Email</span>
+            <input id="email" type="email" placeholder="you@example.com" class="input" />
+          </label>
+          <label class="field">
+            <span>Password</span>
+            <input id="password" type="password" placeholder="••••••••" class="input" />
+          </label>
+          <div class="auth-actions">
+            <button id="loginBtn" class="button button-primary">Login</button>
+            <button id="registerBtn" class="button button-outline">Register</button>
+          </div>
+          <div id="userStatus" class="user-status hidden"></div>
+        </aside>
+      </section>
+
+      <section class="feature-grid">
+        <article class="feature-card card">
+          <h3>Fast setup</h3>
+          <p>Run locally or deploy in Docker with minimal configuration.</p>
+        </article>
+        <article class="feature-card card">
+          <h3>Clean UI</h3>
+          <p>Responsive layout with clear actions and meaningful feedback.</p>
+        </article>
+        <article class="feature-card card">
+          <h3>User notes</h3>
+          <p>Each note is stored securely for the logged-in user only.</p>
+        </article>
+      </section>
+    </main>
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
