@@ -43,3 +43,7 @@ def dashboard():
 @app.get("/about", response_class=HTMLResponse)
 def about():
     return serve_page("about.html")
+
+@app.get("/health")
+def health():
+    return {"status": "ok"}

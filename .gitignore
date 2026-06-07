@@ -1,0 +1,15 @@
+# Secrets — kabhi commit mat karna!
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+dist/
+build/
+.pytest_cache/
+
+# Docker
+*.log
