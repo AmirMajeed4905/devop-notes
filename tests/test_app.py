@@ -1,8 +1,13 @@
 import os
+import shutil
+import tempfile
 import uuid
 from pathlib import Path
 
-os.environ["DATABASE_URL"] = "sqlite:///./test.db"
+# Use a temporary SQLite file so tests do not depend on repo filesystem permissions.
+test_db_dir = Path(tempfile.mkdtemp())
+test_db_path = test_db_dir / "test.db"
+os.environ["DATABASE_URL"] = f"sqlite:///{test_db_path.as_posix()}"
 os.environ["SECRET_KEY"] = "testsecret"
 
 from fastapi.testclient import TestClient
@@ -12,14 +17,16 @@ from app.main import app
 client = TestClient(app)
 
 def setup_module(module):
-    if Path("test.db").exists():
-        Path("test.db").unlink()
+    if test_db_path.exists():
+        test_db_path.unlink()
     Base.metadata.create_all(bind=engine)
 
 
 def teardown_module(module):
-    if Path("test.db").exists():
-        Path("test.db").unlink()
+    if test_db_path.exists():
+        test_db_path.unlink()
+    if test_db_dir.exists():
+        shutil.rmtree(test_db_dir)
 
 
 def unique_email():
