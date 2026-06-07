@@ -1,55 +1,163 @@
-# Notes Studio
+# 🐳 FastAPI + Nginx + PostgreSQL — Docker DevOps Project
 
-A simple FastAPI notes application with a modern UI, nginx reverse proxy, and Docker support.
+A production-style deployment of a FastAPI application with Nginx load balancing, PostgreSQL database, and a full CI/CD pipeline using GitHub Actions.
 
-## Run locally
+## 🏗️ Architecture
 
-```bash
-python -m venv .venv
-.venv\Scripts\activate      # Windows
-pip install -r requirements.txt
-uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+```
+Internet
+    │
+    ▼
+┌─────────┐
+│  Nginx  │  ← Load Balancer (port 8000)
+└────┬────┘
+     │  Round-robin
+  ┌──┴──┐
+  │     │
+┌─┴──┐ ┌┴───┐
+│API1│ │API2│  ← FastAPI + Uvicorn
+└─┬──┘ └┬───┘
+  └──┬───┘
+     ▼
+┌──────────┐
+│PostgreSQL│  ← Database
+└──────────┘
 ```
 
-Open http://localhost:8000
+## 🛠️ Tech Stack
 
-## Run with Docker
+| Layer | Technology |
+|-------|-----------|
+| API Framework | FastAPI + Uvicorn |
+| Load Balancer | Nginx 1.25 Alpine |
+| Database | PostgreSQL 17 |
+| Containerization | Docker + Docker Compose |
+| CI/CD | GitHub Actions |
+| Auth | JWT (python-jose) + Passlib |
+| ORM | SQLAlchemy |
+
+## 📁 Project Structure
+
+```
+project/
+├── .github/
+│   └── workflows/
+│       └── ci.yml          # CI/CD pipeline
+├── nginx/
+│   └── default.conf        # Nginx load balancer config
+├── app/
+│   ├── main.py             # FastAPI application
+│   └── static/             # Static files
+├── tests/
+│   └── ...
+├── Dockerfile              # Multi-stage optimized build
+├── docker-compose.yml      # Full stack definition
+├── .env                    # Local secrets (never commit!)
+├── .env.example            # Template for teammates
+└── requirements.txt
+```
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Docker Desktop installed
+- Docker Hub account
+
+### 1. Clone & Configure
+
+```bash
+git clone <your-repo-url>
+cd your-project
+
+# .env file banao
+cp .env.example .env
+```
+
+`.env` mein fill karo:
+```env
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=your-strong-password
+POSTGRES_DB=mydb
+SECRET_KEY=your-secret-key   # generate: python -c "import secrets; print(secrets.token_hex(32))"
+```
+
+### 2. Run
 
 ```bash
 docker compose up --build
 ```
 
-Open http://localhost:8000
+App available at: **http://localhost:8000**
 
-## GitHub Actions CI
-
-This repository includes a GitHub Actions pipeline at `.github/workflows/ci.yml`.
-The CI workflow:
-- installs dependencies
-- runs `pytest`
-- builds the Docker image to verify the container can build successfully
-
-## Deploy
-
-For production, deploy to any Docker-ready host or VM.
-Recommended options:
-- DigitalOcean Droplet / App Platform
-- AWS ECS, EC2 with Docker Compose
-- Render, Railway, or Fly.io
-
-On a Linux host, deploy with:
+### 3. Useful Commands
 
 ```bash
-docker compose up --build -d
+# Logs dekhna
+docker compose logs -f
+
+# Band karna
+docker compose down
+
+# Band karna + database reset
+docker compose down -v
+
+# Specific container ka log
+docker compose logs api1
 ```
 
-Set production environment variables before startup:
-- `DATABASE_URL` (Postgres connection string)
-- `SECRET_KEY` (JWT secret)
+## 🔄 CI/CD Pipeline
 
-Then visit `http://<your-server-ip>`.
+```
+Push to main
+     │
+     ▼
+┌─────────┐     ┌───────────────┐
+│  Tests  │────▶│ Build & Push  │
+│(pytest) │     │ (Docker Hub)  │
+└─────────┘     └───────────────┘
+```
 
-## Notes
-- The web UI assets are in `app/static` and templates in `app/templates`.
-- The backend uses SQLAlchemy and Postgres.
-- nginx is configured in `nginx/default.conf` to proxy to backend instances and serve static files.
+### GitHub Secrets Required
+
+Go to **Repo → Settings → Secrets → Actions** and add:
+
+| Secret | Value |
+|--------|-------|
+| `DOCKERHUB_USERNAME` | Your Docker Hub username |
+| `DOCKERHUB_TOKEN` | Docker Hub Access Token (not password) |
+
+## 📊 Image Size Optimization
+
+Multi-stage Docker build used to reduce image size:
+
+| | Before | After |
+|--|--------|-------|
+| API Image | 656 MB | 412 MB |
+| Savings | — | **244 MB (37% smaller)** |
+
+**How:** Build stage compiles packages with gcc, final stage copies only the compiled wheels — no build tools in production image.
+
+## 🔒 Security Features
+
+- Non-root user inside containers (`appuser`)
+- Secrets via `.env` file — never hardcoded
+- DB port not exposed in production (only internal Docker network)
+- JWT-based authentication
+- Healthchecks on all services
+
+## 📡 API Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/health` | Health check |
+| POST | `/auth/register` | Register user |
+| POST | `/auth/login` | Login, get JWT |
+| ... | ... | Your endpoints |
+
+## 🧠 What I Learned
+
+- Docker multi-stage builds for smaller images
+- Nginx as a reverse proxy and load balancer
+- Docker Compose healthchecks and service dependencies
+- GitHub Actions CI/CD with real PostgreSQL service
+- Container security best practices
