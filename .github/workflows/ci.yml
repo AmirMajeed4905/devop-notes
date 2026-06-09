@@ -41,12 +41,12 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-          cache: "pip"                     # pip cache — 2nd run fast hoga
+          cache: "pip"
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          pip install -r requirements-dev.txt
 
       - name: Run tests
         run: python -m pytest tests/ -v --tb=short
@@ -57,7 +57,7 @@ jobs:
   build-and-push:
     name: Build & Push Docker Image
     runs-on: ubuntu-latest
-    needs: test                            # Test pass ho tabhi chale
+    needs: test
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
 
     steps:
@@ -81,7 +81,7 @@ jobs:
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/fastapi-app:latest
             ${{ secrets.DOCKERHUB_USERNAME }}/fastapi-app:${{ github.sha }}
-          cache-from: type=gha            # GitHub cache — fast builds
+          cache-from: type=gha
           cache-to: type=gha,mode=max
 
   # ─────────────────────────────────────────────────────────────
@@ -90,7 +90,7 @@ jobs:
   deploy:
     name: Deploy to EC2
     runs-on: ubuntu-latest
-    needs: build-and-push               # Image push ho tabhi deploy karo
+    needs: build-and-push
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
 
     steps:
@@ -101,15 +101,16 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            cd /app
+            cd ~/devop-notes
 
-            # Latest image pull karo Docker Hub se
-            docker compose pull
+            # Latest code pull karo
+            git pull origin main
 
-            # Zero downtime: pehle new containers start, phir old band
-            docker compose up -d --remove-orphans
+            # Rebuild aur restart karo
+            docker compose down
+            docker compose up --build -d --remove-orphans
 
-            # Purani unused images clean karo (disk space bachao)
+            # Purani images clean karo
             docker image prune -f
 
             echo "✅ Deployed: ${{ github.sha }}"
