@@ -7,9 +7,9 @@ on:
     branches: ["main"]
 
 jobs:
-  # ─────────────────────────────────────────────────────────────
-  # JOB 1: Tests — har push pe chalein
-  # ─────────────────────────────────────────────────────────────
+  # ─────────────────────────────
+  # JOB 1: TESTS
+  # ─────────────────────────────
   test:
     name: Run Tests
     runs-on: ubuntu-latest
@@ -46,14 +46,15 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements-dev.txt
+          pip install -r requirements.txt
+          pip install pytest
 
       - name: Run tests
         run: python -m pytest tests/ -v --tb=short
 
-  # ─────────────────────────────────────────────────────────────
-  # JOB 2: Docker Build & Push — sirf main branch pe
-  # ─────────────────────────────────────────────────────────────
+  # ─────────────────────────────
+  # JOB 2: BUILD & PUSH
+  # ─────────────────────────────
   build-and-push:
     name: Build & Push Docker Image
     runs-on: ubuntu-latest
@@ -84,9 +85,9 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-  # ─────────────────────────────────────────────────────────────
-  # JOB 3: Deploy to EC2 — Build ke baad
-  # ─────────────────────────────────────────────────────────────
+  # ─────────────────────────────
+  # JOB 3: DEPLOY
+  # ─────────────────────────────
   deploy:
     name: Deploy to EC2
     runs-on: ubuntu-latest
@@ -103,14 +104,11 @@ jobs:
           script: |
             cd ~/devop-notes
 
-            # Latest code pull karo
             git pull origin main
 
-            # Rebuild aur restart karo
             docker compose down
             docker compose up --build -d --remove-orphans
 
-            # Purani images clean karo
             docker image prune -f
 
-            echo "✅ Deployed: ${{ github.sha }}"
+            echo "Deployed: ${{ github.sha }}"
