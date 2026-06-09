@@ -1,163 +1,204 @@
-# 🐳 FastAPI + Nginx + PostgreSQL — Docker DevOps Project
+# Notes Studio 📝
 
-A production-style deployment of a FastAPI application with Nginx load balancing, PostgreSQL database, and a full CI/CD pipeline using GitHub Actions.
+A production-grade note management application built with FastAPI, PostgreSQL, and Docker — featuring JWT authentication, load balancing, and a fully automated CI/CD pipeline.
 
-## 🏗️ Architecture
+**Live Demo:** http://54.237.199.213
+
+---
+
+## Tech Stack
+
+| Layer | Technology |
+|-------|-----------|
+| Backend | FastAPI (Python 3.12) |
+| Database | PostgreSQL 17 |
+| Auth | JWT + bcrypt |
+| Reverse Proxy | Nginx (load balanced) |
+| Containerization | Docker + Docker Compose |
+| CI/CD | GitHub Actions |
+| Cloud | AWS EC2 |
+
+---
+
+## Architecture
 
 ```
 Internet
     │
     ▼
-┌─────────┐
-│  Nginx  │  ← Load Balancer (port 8000)
-└────┬────┘
-     │  Round-robin
-  ┌──┴──┐
-  │     │
-┌─┴──┐ ┌┴───┐
-│API1│ │API2│  ← FastAPI + Uvicorn
-└─┬──┘ └┬───┘
-  └──┬───┘
-     ▼
-┌──────────┐
-│PostgreSQL│  ← Database
-└──────────┘
+Nginx (Port 80)
+Load Balancer
+    │
+    ├──▶ FastAPI Instance 1 (api1:8000)
+    │
+    └──▶ FastAPI Instance 2 (api2:8000)
+              │
+              ▼
+        PostgreSQL 17
+        (persistent volume)
 ```
 
-## 🛠️ Tech Stack
+**Why 2 API instances?**
+- Zero downtime if one instance crashes
+- Load distributed between both
+- Production-grade reliability
 
-| Layer | Technology |
-|-------|-----------|
-| API Framework | FastAPI + Uvicorn |
-| Load Balancer | Nginx 1.25 Alpine |
-| Database | PostgreSQL 17 |
-| Containerization | Docker + Docker Compose |
-| CI/CD | GitHub Actions |
-| Auth | JWT (python-jose) + Passlib |
-| ORM | SQLAlchemy |
+---
 
-## 📁 Project Structure
+## Features
+
+- **User Authentication** — Register, login, logout with JWT tokens
+- **Notes CRUD** — Create, read, update, delete notes
+- **Real-time Search** — Filter notes by title or content instantly
+- **Secure by default** — Non-root Docker user, no exposed DB ports
+- **Health checks** — All containers monitored automatically
+- **Auto deploy** — Push to main → live in minutes
+
+---
+
+## Project Structure
 
 ```
-project/
+devop-notes/
+├── app/
+│   ├── main.py          # FastAPI app entry point
+│   ├── auth.py          # Authentication routes
+│   ├── routes.py        # Notes CRUD routes
+│   ├── models.py        # SQLAlchemy models
+│   ├── schemas.py       # Pydantic schemas
+│   ├── database.py      # DB connection
+│   ├── security.py      # JWT + password hashing
+│   ├── templates/       # HTML pages
+│   └── static/          # CSS + JS
+├── nginx/
+│   └── default.conf     # Reverse proxy + load balancer config
+├── tests/
+│   └── test_app.py      # Pytest test suite
 ├── .github/
 │   └── workflows/
-│       └── ci.yml          # CI/CD pipeline
-├── nginx/
-│   └── default.conf        # Nginx load balancer config
-├── app/
-│   ├── main.py             # FastAPI application
-│   └── static/             # Static files
-├── tests/
-│   └── ...
-├── Dockerfile              # Multi-stage optimized build
-├── docker-compose.yml      # Full stack definition
-├── .env                    # Local secrets (never commit!)
-├── .env.example            # Template for teammates
-└── requirements.txt
+│       └── ci.yml       # CI/CD pipeline
+├── Dockerfile           # Multi-stage production build
+├── docker-compose.yml   # Full stack orchestration
+├── requirements.txt     # Production dependencies
+└── requirements-dev.txt # Dev + testing dependencies
 ```
 
-## 🚀 Getting Started
+---
 
-### Prerequisites
-- Docker Desktop installed
-- Docker Hub account
+## Local Setup
 
-### 1. Clone & Configure
+**Prerequisites:** Docker Desktop installed
 
 ```bash
-git clone <your-repo-url>
-cd your-project
+# 1. Clone
+git clone https://github.com/AmirMajeed4905/devop-notes.git
+cd devop-notes
 
-# .env file banao
+# 2. Environment setup
 cp .env.example .env
+# Edit .env with your values
+
+# 3. Generate secret key
+python3 -c "import secrets; print(secrets.token_hex(32))"
+
+# 4. Run
+docker compose up --build -d
+
+# 5. Open
+# http://localhost
 ```
 
-`.env` mein fill karo:
+---
+
+## Environment Variables
+
 ```env
 POSTGRES_USER=postgres
-POSTGRES_PASSWORD=your-strong-password
-POSTGRES_DB=mydb
-SECRET_KEY=your-secret-key   # generate: python -c "import secrets; print(secrets.token_hex(32))"
+POSTGRES_PASSWORD=your_strong_password
+POSTGRES_DB=notesdb
+SECRET_KEY=your_generated_secret_key
 ```
 
-### 2. Run
+---
 
-```bash
-docker compose up --build
-```
+## CI/CD Pipeline
 
-App available at: **http://localhost:8000**
-
-### 3. Useful Commands
-
-```bash
-# Logs dekhna
-docker compose logs -f
-
-# Band karna
-docker compose down
-
-# Band karna + database reset
-docker compose down -v
-
-# Specific container ka log
-docker compose logs api1
-```
-
-## 🔄 CI/CD Pipeline
+Every push to `main` branch automatically:
 
 ```
-Push to main
-     │
-     ▼
-┌─────────┐     ┌───────────────┐
-│  Tests  │────▶│ Build & Push  │
-│(pytest) │     │ (Docker Hub)  │
-└─────────┘     └───────────────┘
+git push
+    │
+    ▼
+① Run Tests (pytest + PostgreSQL)
+    │
+    ▼
+② Build Docker Image
+   Push to Docker Hub
+    │
+    ▼
+③ SSH into EC2
+   Pull latest image
+   docker compose up -d
+    │
+    ▼
+✅ Live at http://54.237.199.213
 ```
 
-### GitHub Secrets Required
+**Required GitHub Secrets:**
 
-Go to **Repo → Settings → Secrets → Actions** and add:
+| Secret | Description |
+|--------|-------------|
+| `DOCKERHUB_USERNAME` | Docker Hub username |
+| `DOCKERHUB_TOKEN` | Docker Hub access token |
+| `EC2_HOST` | EC2 public IP |
+| `EC2_USER` | EC2 username (ubuntu) |
+| `EC2_SSH_KEY` | EC2 private key (.pem content) |
 
-| Secret | Value |
-|--------|-------|
-| `DOCKERHUB_USERNAME` | Your Docker Hub username |
-| `DOCKERHUB_TOKEN` | Docker Hub Access Token (not password) |
+---
 
-## 📊 Image Size Optimization
+## Docker Image Optimization
 
-Multi-stage Docker build used to reduce image size:
+Multi-stage build keeps image size minimal:
 
-| | Before | After |
-|--|--------|-------|
-| API Image | 656 MB | 412 MB |
-| Savings | — | **244 MB (37% smaller)** |
+```
+Stage 1 (Builder):   gcc + libpq-dev + compile wheels
+Stage 2 (Final):     libpq5 only + pre-built wheels
 
-**How:** Build stage compiles packages with gcc, final stage copies only the compiled wheels — no build tools in production image.
+Result: ~320MB vs ~600MB (standard build)
 
-## 🔒 Security Features
+Production deps only — pytest/httpx excluded from image
+```
 
-- Non-root user inside containers (`appuser`)
-- Secrets via `.env` file — never hardcoded
-- DB port not exposed in production (only internal Docker network)
-- JWT-based authentication
-- Healthchecks on all services
+---
 
-## 📡 API Endpoints
+## API Endpoints
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
+| POST | `/auth/register` | Register new user |
+| POST | `/auth/login` | Login, returns JWT |
+| GET | `/notes` | Get all user notes |
+| POST | `/notes` | Create note |
+| PUT | `/notes/{id}` | Update note |
+| DELETE | `/notes/{id}` | Delete note |
 | GET | `/health` | Health check |
-| POST | `/auth/register` | Register user |
-| POST | `/auth/login` | Login, get JWT |
-| ... | ... | Your endpoints |
 
-## 🧠 What I Learned
+---
 
-- Docker multi-stage builds for smaller images
-- Nginx as a reverse proxy and load balancer
-- Docker Compose healthchecks and service dependencies
-- GitHub Actions CI/CD with real PostgreSQL service
-- Container security best practices
+## Running Tests
+
+```bash
+pip install -r requirements-dev.txt
+pytest tests/ -v
+```
+
+---
+
+## Author
+
+**Amir Majeed**
+- GitHub: [@AmirMajeed4905](https://github.com/AmirMajeed4905)
+
+---
+
+*Built to demonstrate production-grade DevOps practices — Docker, CI/CD, cloud deployment, and security best practices.*
