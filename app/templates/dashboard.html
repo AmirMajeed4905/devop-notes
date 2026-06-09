@@ -3,15 +3,18 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dashboard | Notes Studio</title>
+  <title>Dashboard — Notes Studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/static/style.css">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%231a2938'/%3E%3Ctext x='50' y='55' font-size='50' text-anchor='middle' fill='%23ffffff' font-family='Inter,Arial'%3E%F0%9F%93%92%3C/text%3E%3C/svg%3E">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%236366f1'/%3E%3Ctext x='50' y='67' font-size='58' text-anchor='middle' fill='white' font-family='Inter,Arial' font-weight='800'%3EN%3C/text%3E%3C/svg%3E">
 </head>
 <body>
   <div class="page-shell">
+
     <header class="topbar">
       <div class="topbar__brand">
-        <div class="brand-mark">DS</div>
+        <div class="brand-mark">N</div>
         <div>
           <div class="brand-name">Notes Studio</div>
           <div class="brand-subtitle">Your personal dashboard</div>
@@ -21,56 +24,57 @@
         <a href="/">Home</a>
         <a href="/dashboard">Dashboard</a>
         <a href="/about">About</a>
-        <button id="logoutBtn" class="button button-secondary">Logout</button>
+        <button id="logoutBtn" class="button button-secondary" style="display:none;">Sign Out</button>
       </nav>
     </header>
 
-    <main class="content">
+    <main>
       <section class="dashboard-overview">
         <div>
-          <span class="eyebrow">Dashboard</span>
-          <h1>Manage your notes with confidence.</h1>
-          <p>Login, create notes, search instantly, and keep your data up to date.</p>
+          <span class="eyebrow">Your workspace</span>
+          <h1>My Notes</h1>
+          <p>Create, search, and manage all your notes in one place.</p>
         </div>
         <div class="dashboard-status">
           <div id="userStatus" class="user-status hidden"></div>
-          <button id="refreshBtn" class="button button-secondary">Refresh notes</button>
+          <button id="refreshBtn" class="button button-secondary">↻ Refresh</button>
         </div>
       </section>
 
       <section class="notes-grid-shell card">
         <div class="notes-panel__header">
           <div>
-            <h2>Your notes</h2>
-            <p>Only visible after you login with your registered account.</p>
+            <h2>All Notes</h2>
+            <p>Login to see and manage your notes.</p>
           </div>
           <div class="notes-panel__controls">
-            <input id="search" type="search" placeholder="Search notes" class="input input-inline" />
+            <input id="search" type="search" placeholder="🔍  Search notes..." class="input input-inline" />
           </div>
         </div>
 
         <div class="note-editor">
           <label class="field">
-            <span>Title</span>
-            <input id="title" type="text" placeholder="Note title" class="input" />
+            <span>Note Title</span>
+            <input id="title" type="text" placeholder="Give your note a title..." class="input" />
           </label>
           <label class="field">
-            <span>Note content</span>
-            <textarea id="content" rows="4" placeholder="Write something useful..." class="textarea"></textarea>
+            <span>Content</span>
+            <textarea id="content" rows="3" placeholder="Write something useful..." class="textarea"></textarea>
           </label>
-          <button id="createBtn" class="button button-primary">Add note</button>
+          <button id="createBtn" class="button button-primary" style="align-self:flex-start;">＋ Add Note</button>
         </div>
 
         <div id="notesGrid" class="notes-grid"></div>
       </section>
     </main>
 
+    <!-- Edit Modal -->
     <div id="modal" class="modal hidden">
       <div class="modal__dialog">
         <div class="modal__header">
           <div>
-            <p class="eyebrow">Edit note</p>
-            <h3>Update note</h3>
+            <p class="eyebrow">Editing note</p>
+            <h3>Update Note</h3>
           </div>
           <button id="cancelEditBtn" class="icon-button">✕</button>
         </div>
@@ -79,16 +83,16 @@
           <input id="editTitle" type="text" class="input" />
         </label>
         <label class="field">
-          <span>Note content</span>
+          <span>Content</span>
           <textarea id="editContent" rows="5" class="textarea"></textarea>
         </label>
         <div class="modal__actions">
-          <button id="saveEditBtn" class="button button-primary">Save changes</button>
+          <button id="saveEditBtn" class="button button-primary">Save Changes</button>
         </div>
       </div>
     </div>
-  </div>
 
+  </div>
   <script src="/static/app.js"></script>
 </body>
 </html>

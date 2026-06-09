@@ -3,18 +3,21 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>About | Notes Studio</title>
+  <title>About — Notes Studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/static/style.css">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%231a2938'/%3E%3Ctext x='50' y='55' font-size='50' text-anchor='middle' fill='%23ffffff' font-family='Inter,Arial'%3E%F0%9F%93%92%3C/text%3E%3C/svg%3E">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%236366f1'/%3E%3Ctext x='50' y='67' font-size='58' text-anchor='middle' fill='white' font-family='Inter,Arial' font-weight='800'%3EN%3C/text%3E%3C/svg%3E">
 </head>
 <body>
   <div class="page-shell">
+
     <header class="topbar">
       <div class="topbar__brand">
-        <div class="brand-mark">AB</div>
+        <div class="brand-mark">N</div>
         <div>
           <div class="brand-name">Notes Studio</div>
-          <div class="brand-subtitle">About the application</div>
+          <div class="brand-subtitle">Smart note management</div>
         </div>
       </div>
       <nav class="topbar__nav">
@@ -24,26 +27,53 @@
       </nav>
     </header>
 
-    <main class="content">
-      <section class="card about-card">
-        <h1>About Notes Studio</h1>
-        <p>Notes Studio is designed for a polished, professional workflow with secure user authentication, PostgreSQL persistence, and Docker support.</p>
-        <div class="about-grid">
-          <article>
-            <h2>Built with FastAPI</h2>
-            <p>Lightning-fast API routes and modern Python architecture.</p>
-          </article>
-          <article>
-            <h2>Secure login</h2>
-            <p>JWT-based authentication keeps notes private per account.</p>
-          </article>
-          <article>
-            <h2>Docker deployment</h2>
-            <p>Easily run the full stack locally or in production with Docker Compose.</p>
-          </article>
-        </div>
+    <main>
+      <section class="card about-hero">
+        <span class="eyebrow">About the project</span>
+        <h1>Built for the <span style="background:linear-gradient(135deg,#818cf8,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">modern web</span></h1>
+        <p>Notes Studio is a full-stack notes app built to demonstrate production-grade development — from secure auth to containerized deployment.</p>
+      </section>
+
+      <div class="tech-grid" style="margin-top:20px;">
+        <article class="tech-card card">
+          <div class="tech-icon">⚡</div>
+          <h3>FastAPI</h3>
+          <p>High-performance Python backend with automatic OpenAPI docs and async support.</p>
+        </article>
+        <article class="tech-card card">
+          <div class="tech-icon">🐘</div>
+          <h3>PostgreSQL</h3>
+          <p>Reliable relational database with SQLAlchemy ORM for clean data modeling.</p>
+        </article>
+        <article class="tech-card card">
+          <div class="tech-icon">🔐</div>
+          <h3>JWT Auth</h3>
+          <p>Secure token-based authentication with bcrypt password hashing.</p>
+        </article>
+        <article class="tech-card card">
+          <div class="tech-icon">🐳</div>
+          <h3>Docker</h3>
+          <p>Multi-stage builds for minimal images. Full stack runs with one command.</p>
+        </article>
+        <article class="tech-card card">
+          <div class="tech-icon">🔁</div>
+          <h3>Nginx</h3>
+          <p>Reverse proxy with load balancing across two API instances for reliability.</p>
+        </article>
+        <article class="tech-card card">
+          <div class="tech-icon">🚀</div>
+          <h3>CI/CD</h3>
+          <p>GitHub Actions pipeline — test, build Docker image, and deploy automatically.</p>
+        </article>
+      </div>
+
+      <section class="card" style="padding:32px;margin-top:4px;text-align:center;">
+        <h2 style="font-size:1.3rem;font-weight:700;margin-bottom:10px;">Ready to try it?</h2>
+        <p style="color:var(--text-muted);margin-bottom:20px;font-size:0.9rem;">Create an account and start organizing your notes in seconds.</p>
+        <a href="/" class="button button-primary">Get Started →</a>
       </section>
     </main>
+
   </div>
 </body>
 </html>

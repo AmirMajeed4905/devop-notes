@@ -3,18 +3,21 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Notes Studio</title>
+  <title>Notes Studio — Smart Note Management</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/static/style.css">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%231a2938'/%3E%3Ctext x='50' y='55' font-size='50' text-anchor='middle' fill='%23ffffff' font-family='Inter,Arial'%3E%F0%9F%93%92%3C/text%3E%3C/svg%3E">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%236366f1'/%3E%3Ctext x='50' y='67' font-size='58' text-anchor='middle' fill='white' font-family='Inter,Arial' font-weight='800'%3EN%3C/text%3E%3C/svg%3E">
 </head>
 <body>
   <div class="page-shell">
+
     <header class="topbar">
       <div class="topbar__brand">
-        <div class="brand-mark">NS</div>
+        <div class="brand-mark">N</div>
         <div>
           <div class="brand-name">Notes Studio</div>
-          <div class="brand-subtitle">Professional notes for teams and individuals</div>
+          <div class="brand-subtitle">Smart note management</div>
         </div>
       </div>
       <nav class="topbar__nav">
@@ -24,70 +27,79 @@
       </nav>
     </header>
 
-    <main class="content content-landing">
+    <main>
       <section class="hero card">
         <div class="hero__copy">
           <span class="eyebrow">Organize better</span>
-          <h1>Modern note management built for growth.</h1>
-          <p>Start with a polished dashboard, secure authentication, and seamless note editing — all powered by FastAPI and PostgreSQL.</p>
+          <h1>Your ideas deserve a <span>better home.</span></h1>
+          <p>Notes Studio gives you a clean, fast, and secure place to capture thoughts. Built with FastAPI and PostgreSQL — deployable anywhere with Docker.</p>
+
           <div class="hero__stats">
             <article>
-              <strong>Write faster</strong>
-              <p>Clean, simple note creation</p>
+              <strong>⚡ Fast</strong>
+              <p>Instant search & save</p>
             </article>
             <article>
-              <strong>Stay secure</strong>
-              <p>JWT auth and protected data</p>
+              <strong>🔒 Secure</strong>
+              <p>JWT authentication</p>
             </article>
             <article>
-              <strong>Deploy quickly</strong>
-              <p>Docker-ready stack</p>
+              <strong>🐳 Docker Ready</strong>
+              <p>One command deploy</p>
             </article>
           </div>
+
           <div class="hero__actions">
-            <a class="button button-primary" href="/dashboard">Go to dashboard</a>
-            <a class="button button-secondary" href="/about">Learn more</a>
+            <a class="button button-primary" href="/dashboard">Open Dashboard</a>
+            <a class="button button-secondary" href="/about">Learn More</a>
           </div>
         </div>
 
         <aside class="hero__panel">
           <div class="panel-head">
-            <p class="eyebrow">Sign in</p>
-            <h2>Secure access to your workspace</h2>
+            <p class="eyebrow">Get started</p>
+            <h2>Sign in to your workspace</h2>
           </div>
+
           <label class="field">
-            <span>Email</span>
-            <input id="email" type="email" placeholder="you@example.com" class="input" />
+            <span>Email address</span>
+            <input id="email" type="email" placeholder="you@example.com" class="input" autocomplete="email" />
           </label>
+
           <label class="field">
             <span>Password</span>
-            <input id="password" type="password" placeholder="••••••••" class="input" />
+            <input id="password" type="password" placeholder="••••••••" class="input" autocomplete="current-password" />
           </label>
+
           <div class="auth-actions">
-            <button id="loginBtn" class="button button-primary">Login</button>
+            <button id="loginBtn" class="button button-primary">Sign In</button>
             <button id="registerBtn" class="button button-outline">Register</button>
           </div>
+
           <div id="userStatus" class="user-status hidden"></div>
         </aside>
       </section>
 
-      <section class="feature-grid">
+      <section class="feature-grid" style="margin-top:20px;">
         <article class="feature-card card">
-          <h3>Fast setup</h3>
-          <p>Run locally or deploy in Docker with minimal configuration.</p>
+          <div style="font-size:1.8rem;margin-bottom:12px;">📝</div>
+          <h3>Simple note creation</h3>
+          <p>Add, edit, and delete notes instantly. Clean editor with no distractions.</p>
         </article>
         <article class="feature-card card">
-          <h3>Clean UI</h3>
-          <p>Responsive layout with clear actions and meaningful feedback.</p>
+          <div style="font-size:1.8rem;margin-bottom:12px;">🔍</div>
+          <h3>Instant search</h3>
+          <p>Find any note in milliseconds. Filter by title or content in real time.</p>
         </article>
         <article class="feature-card card">
-          <h3>User notes</h3>
-          <p>Each note is stored securely for the logged-in user only.</p>
+          <div style="font-size:1.8rem;margin-bottom:12px;">🛡️</div>
+          <h3>Private & secure</h3>
+          <p>Notes are tied to your account only. JWT auth keeps data protected.</p>
         </article>
       </section>
     </main>
-  </div>
 
+  </div>
   <script src="/static/app.js"></script>
 </body>
 </html>

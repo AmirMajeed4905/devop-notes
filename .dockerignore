@@ -1,4 +1,48 @@
+# Git
+.git
+.gitignore
+
+# Python cache
 __pycache__
 *.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# Secrets — kabhi image mein mat jao!
 .env
-venv
+.env.*
+*.key
+*.pem
+
+# Tests — production image mein zarori nahi
+tests/
+pytest.ini
+.pytest_cache/
+
+# Docs aur misc
+README.md
+*.md
+docs/
+
+# Docker files khud
+docker-compose*.yml
+Dockerfile*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# IDE
+.vscode/
+.idea/
